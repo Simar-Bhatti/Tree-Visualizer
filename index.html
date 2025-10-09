@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tree Traversal Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left side - Visualization -->
+    <div class="visualization-panel">
+      <h1>Binary Tree Visualizer</h1>
+      <div id="tree-container">
+        <div id="tree">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <p>Enter tree data to visualize</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side - Control Panel -->
+    <div class="control-panel">
+      <h2>Control Panel</h2>
+
+      <div class="section">
+        <h3>Input Tree Data</h3>
+        <div class="input-group">
+          <label>Enter tree as level-order (use null for empty nodes):</label>
+          <textarea id="tree-input"></textarea>
+          <div class="example-text">Example: 1,2,3,4,5,null,6,null,null,7,8</div>
+        </div>
+        <button class="btn-primary" onclick="buildTree()">Build Tree</button>
+      </div>
+
+      <div class="section">
+        <h3>Tree Traversals</h3>
+        <div class="traversal-info" id="traversal-info"></div>
+        <div class="button-group">
+          <button class="btn-secondary" onclick="startInorder()" id="btn-inorder" disabled>
+            Inorder (Left → Root → Right)
+          </button>
+          <button class="btn-secondary" onclick="startPreorder()" id="btn-preorder" disabled>
+            Preorder (Root → Left → Right)
+          </button>
+          <button class="btn-secondary" onclick="startPostorder()" id="btn-postorder" disabled>
+            Postorder (Left → Right → Root)
+          </button>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 How to use:</strong><br>
+        1. Enter tree values separated by commas<br>
+        2. Use "null" for missing nodes<br>
+        3. Click "Build Tree" to visualize<br>
+        4. Choose a traversal method to animate
+      </div>
+    </div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+</html>
