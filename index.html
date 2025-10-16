@@ -3,22 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tree Traversal Visualizer</title>
+  <title>Algorithm Visualizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">🎯 Algorithm Visualizer</div>
+      <ul class="nav-links">
+        <li><a href="#" onclick="showTree()" id="nav-tree" class="active">Binary Tree</a></li>
+        <li><a href="#" onclick="showGraph()" id="nav-graph">Graph Algorithms</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="container">
     <!-- Left side - Visualization -->
     <div class="visualization-panel">
-      <h1>Binary Tree Visualizer</h1>
-      <div id="tree-container">
-        <div id="tree">
+      <h1 id="page-title">🌳 Binary Tree Visualizer</h1>
+      <div id="canvas-container">
+        <div id="canvas">
           <div class="empty-state">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
               <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
-            <p>Enter tree data to visualize</p>
+            <p>Enter data to visualize</p>
           </div>
         </div>
       </div>
@@ -26,40 +37,106 @@
 
     <!-- Right side - Control Panel -->
     <div class="control-panel">
-      <h2>Control Panel</h2>
+      <!-- Tree Controls -->
+      <div id="tree-controls">
+        <h2>Tree Control Panel</h2>
 
-      <div class="section">
-        <h3>Input Tree Data</h3>
-        <div class="input-group">
-          <label>Enter tree as level-order (use null for empty nodes):</label>
-          <textarea id="tree-input"></textarea>
-          <div class="example-text">Example: 1,2,3,4,5,null,6,null,null,7,8</div>
+        <div class="section">
+          <h3>📝 Input Tree Data</h3>
+          <div class="input-group">
+            <label>Enter tree as level-order (use null for empty nodes):</label>
+            <textarea id="tree-input"></textarea>
+            <div class="example-text">Example: 1,2,3,4,5,null,6,null,null,7,8</div>
+          </div>
+          <button class="btn-primary" onclick="buildTree()">🌲 Build Tree</button>
         </div>
-        <button class="btn-primary" onclick="buildTree()">Build Tree</button>
+
+        <div class="section">
+          <h3>🎯 Tree Traversals</h3>
+          <div class="algo-info" id="tree-algo-info"></div>
+          <div class="button-group">
+            <button class="btn-secondary" onclick="startInorder()" id="btn-inorder" disabled>
+              Inorder (L → Root → R)
+            </button>
+            <button class="btn-secondary" onclick="startPreorder()" id="btn-preorder" disabled>
+              Preorder (Root → L → R)
+            </button>
+            <button class="btn-secondary" onclick="startPostorder()" id="btn-postorder" disabled>
+              Postorder (L → R → Root)
+            </button>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong>💡 How to use:</strong><br>
+          1. Enter tree values separated by commas<br>
+          2. Use "null" for missing nodes<br>
+          3. Click "Build Tree" to visualize<br>
+          4. Choose a traversal method to animate
+        </div>
       </div>
 
-      <div class="section">
-        <h3>Tree Traversals</h3>
-        <div class="traversal-info" id="traversal-info"></div>
-        <div class="button-group">
-          <button class="btn-secondary" onclick="startInorder()" id="btn-inorder" disabled>
-            Inorder (Left → Root → Right)
-          </button>
-          <button class="btn-secondary" onclick="startPreorder()" id="btn-preorder" disabled>
-            Preorder (Root → Left → Right)
-          </button>
-          <button class="btn-secondary" onclick="startPostorder()" id="btn-postorder" disabled>
-            Postorder (Left → Right → Root)
-          </button>
-        </div>
-      </div>
+      <!-- Graph Controls -->
+      <div id="graph-controls" class="hidden">
+        <h2>Graph Control Panel</h2>
 
-      <div class="info-box">
-        <strong>💡 How to use:</strong><br>
-        1. Enter tree values separated by commas<br>
-        2. Use "null" for missing nodes<br>
-        3. Click "Build Tree" to visualize<br>
-        4. Choose a traversal method to animate
+        <div class="section">
+          <h3>📝 Input Graph Data</h3>
+          <div class="input-group">
+            <label>Graph Type:</label>
+            <select id="graph-type">
+              <option value="unweighted">Unweighted Graph</option>
+              <option value="weighted">Weighted Graph</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Enter edges (format varies by type):</label>
+            <textarea id="graph-input"></textarea>
+            <div class="example-text" id="graph-example">Unweighted: 0-1,0-2,1-3,1-4,2-4</div>
+          </div>
+          <div class="input-group">
+            <label>Number of nodes:</label>
+            <input type="text" id="node-count" placeholder="e.g., 5">
+          </div>
+          <button class="btn-primary" onclick="buildGraph()">🔗 Build Graph</button>
+        </div>
+
+        <div class="section">
+          <h3>🎯 Graph Algorithms</h3>
+          <div class="algo-info" id="graph-algo-info"></div>
+          <div class="input-group">
+            <label>Start Node:</label>
+            <input type="text" id="start-node" placeholder="0">
+          </div>
+          <div class="input-group" id="end-node-group">
+            <label>End Node (for pathfinding):</label>
+            <input type="text" id="end-node" placeholder="4">
+          </div>
+          <div class="button-group">
+            <button class="btn-secondary" onclick="startBFS()" id="btn-bfs" disabled>
+              BFS (Breadth-First)
+            </button>
+            <button class="btn-secondary" onclick="startDFS()" id="btn-dfs" disabled>
+              DFS (Depth-First)
+            </button>
+            <button class="btn-secondary" onclick="startDijkstra()" id="btn-dijkstra" disabled>
+              Dijkstra's Algorithm
+            </button>
+            <button class="btn-secondary" onclick="startAStar()" id="btn-astar" disabled>
+              A* Search
+            </button>
+            <button class="btn-danger" onclick="resetGraph()" id="btn-reset" disabled>
+              Reset Visualization
+            </button>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <strong>💡 How to use:</strong><br>
+          <strong>Unweighted:</strong> 0-1,0-2,1-3 (node pairs)<br>
+          <strong>Weighted:</strong> 0-1-5,0-2-3,1-3-2 (source-dest-weight)<br>
+          Enter start/end nodes, then run algorithms
+        </div>
       </div>
     </div>
   </div>

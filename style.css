@@ -1,4 +1,4 @@
-   *{
+* {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -8,14 +8,66 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
-      display: flex;
       color: #333;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-brand {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #667eea;
+      padding: 20px 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #555;
+      padding: 25px 30px;
+      display: block;
+      font-weight: 600;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .nav-links a:hover {
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .nav-links a.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+      background: rgba(102, 126, 234, 0.05);
     }
 
     .container {
       display: flex;
       width: 100%;
-      height: 100vh;
+      min-height: calc(100vh - 70px);
     }
 
     /* Left side - Visualization */
@@ -24,35 +76,46 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px;
+      justify-content: flex-start;
+      padding: 30px 40px 40px 40px;
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
     }
 
     .visualization-panel h1 {
       color: white;
-      margin-bottom: 30px;
-      font-size: 2.5em;
+      margin-bottom: 20px;
+      font-size: 2em;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
 
-    #tree-container {
+    #canvas-container {
       position: relative;
       width: 100%;
-      max-width: 800px;
-      height: 500px;
+      max-width: 900px;
+      height: 650px;
       background: white;
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    #tree {
+    #canvas {
       position: relative;
       width: 100%;
       height: 100%;
-      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
     }
 
     .empty-state {
@@ -72,6 +135,7 @@
       opacity: 0.3;
     }
 
+    /* Node styles for tree */
     .node-wrapper {
       position: absolute;
       transform: translate(-50%, -50%);
@@ -102,6 +166,24 @@
       box-shadow: 0 6px 25px rgba(245, 87, 108, 0.5);
     }
 
+    .node.visited {
+      background: linear-gradient(135deg, #56ccf2 0%, #2f80ed 100%);
+    }
+
+    .node.current {
+      background: linear-gradient(135deg, #ffd89b 0%, #ff6347 100%);
+      animation: pulse 1s infinite;
+    }
+
+    .node.path {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1.3); }
+      50% { transform: scale(1.5); }
+    }
+
     .edges {
       position: absolute;
       top: 0;
@@ -120,7 +202,7 @@
 
     /* Right side - Control Panel */
     .control-panel {
-      width: 400px;
+      width: 420px;
       background: white;
       padding: 40px;
       overflow-y: auto;
@@ -157,7 +239,7 @@
       font-size: 0.95em;
     }
 
-    input[type="text"], textarea {
+    input[type="text"], textarea, select {
       width: 100%;
       padding: 12px;
       border: 2px solid #e0e0e0;
@@ -167,14 +249,14 @@
       font-family: 'Courier New', monospace;
     }
 
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus, textarea:focus, select:focus {
       outline: none;
       border-color: #667eea;
     }
 
     textarea {
       resize: vertical;
-      min-height: 100px;
+      min-height: 120px;
     }
 
     .example-text {
@@ -224,12 +306,24 @@
       color: white;
     }
 
+    .btn-danger {
+      background: #f5f5f5;
+      color: #f5576c;
+      border: 2px solid #f5576c;
+    }
+
+    .btn-danger:hover {
+      background: #f5576c;
+      color: white;
+    }
+
     button:disabled {
       background: #ccc;
       color: #888;
       cursor: not-allowed;
       box-shadow: none;
       transform: none;
+      border: none;
     }
 
     .info-box {
@@ -247,7 +341,7 @@
       color: #667eea;
     }
 
-    .traversal-info {
+    .algo-info {
       background: #fff3cd;
       border-left: 4px solid #ffc107;
       padding: 12px;
@@ -257,15 +351,44 @@
       display: none;
     }
 
-    .traversal-info.show {
+    .algo-info.show {
       display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Legend for graph */
+    .legend {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.95);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      font-size: 0.85em;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid white;
     }
 
     @media (max-width: 1024px) {
       .container {
         flex-direction: column;
       }
-
       .control-panel {
         width: 100%;
         max-height: 50vh;
