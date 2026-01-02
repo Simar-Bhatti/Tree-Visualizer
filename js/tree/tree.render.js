@@ -16,13 +16,14 @@ export function drawTree() {
     width / 4
   );
 
-  // 1️⃣ Draw edges FIRST (SVG layer)
+
+  // Edges
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.classList.add('edges');
   drawEdges(state.treeRoot, svg);
   canvas.appendChild(svg);
 
-  // 2️⃣ Draw nodes ABOVE edges
+  // Nodes above svg
   drawNodes(state.treeRoot, canvas);
 }
 
