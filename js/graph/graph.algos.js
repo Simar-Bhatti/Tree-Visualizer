@@ -1,6 +1,7 @@
 import { state } from '../state.js';
 import { sleep } from '../utils/sleep.js';
 import { drawGraphCanvas } from './graph.render.js';
+import { MinPriorityQueue } from './priorityQueue.js';  
 
 /* ---------------- BFS ---------------- */
 
@@ -53,29 +54,19 @@ export async function dfs(u, visited) {
 export async function dijkstra(start, end) {
   const dist = {};
   const prev = {};
-  const unvisited = new Set();
+  const pq = new MinPriorityQueue();
 
   for (const node in state.graph) {
     dist[node] = Infinity;
     prev[node] = null;
-    unvisited.add(Number(node));
   }
+
   dist[start] = 0;
+  pq.push(start, 0);
 
-  while (unvisited.size) {
-    let u = null;
-    let min = Infinity;
+  while (!pq.isEmpty()) {
+    const { node: u } = pq.pop();
 
-    for (const node of unvisited) {
-      if (dist[node] < min) {
-        min = dist[node];
-        u = node;
-      }
-    }
-
-    if (u === null) break;
-
-    unvisited.delete(u);
     state.graphNodes[u].state = 'current';
     drawGraphCanvas();
     await sleep(800);
@@ -87,6 +78,7 @@ export async function dijkstra(start, end) {
       if (alt < dist[v]) {
         dist[v] = alt;
         prev[v] = u;
+        pq.push(v, alt); // 🔑 priority = distance
       }
     }
 
@@ -97,6 +89,7 @@ export async function dijkstra(start, end) {
 
   await highlightPath(prev, start, end);
 }
+
 
 /* ---------------- A* ---------------- */
 
@@ -107,11 +100,11 @@ function heuristic(a, b) {
 }
 
 export async function aStar(start, end) {
-  const open = new Set([start]);
-  const closed = new Set();
   const g = {};
   const f = {};
   const prev = {};
+  const pq = new MinPriorityQueue();
+  const closed = new Set();
 
   for (const node in state.graph) {
     g[node] = Infinity;
@@ -121,37 +114,30 @@ export async function aStar(start, end) {
 
   g[start] = 0;
   f[start] = heuristic(start, end);
+  pq.push(start, f[start]);
 
-  while (open.size) {
-    let u = null;
-    let min = Infinity;
+  while (!pq.isEmpty()) {
+    const { node: u } = pq.pop();
 
-    for (const node of open) {
-      if (f[node] < min) {
-        min = f[node];
-        u = node;
-      }
-    }
-
-    if (u === end) break;
-
-    open.delete(u);
+    if (closed.has(u)) continue;
     closed.add(u);
 
     state.graphNodes[u].state = 'current';
     drawGraphCanvas();
     await sleep(800);
 
+    if (u === end) break;
+
     for (const { node: v, weight } of state.graph[u]) {
       if (closed.has(v)) continue;
 
       const temp = g[u] + weight;
-      if (!open.has(v)) open.add(v);
-      else if (temp >= g[v]) continue;
-
-      prev[v] = u;
-      g[v] = temp;
-      f[v] = g[v] + heuristic(v, end);
+      if (temp < g[v]) {
+        g[v] = temp;
+        f[v] = g[v] + heuristic(v, end);
+        prev[v] = u;
+        pq.push(v, f[v]);
+      }
     }
 
     state.graphNodes[u].state = 'visited';
@@ -161,6 +147,7 @@ export async function aStar(start, end) {
 
   await highlightPath(prev, start, end);
 }
+
 
 /* ---------------- PATH HIGHLIGHT ---------------- */
 

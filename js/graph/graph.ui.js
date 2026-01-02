@@ -1,7 +1,6 @@
 import { state } from '../state.js';
 import { drawGraphCanvas } from './graph.render.js';
 import { bfs, dfs, dijkstra, aStar } from './graph.algos.js';
-import { resetGraphStates } from './graph.state.js';
 
 /* ---------------- BUILD GRAPH ---------------- */
 
