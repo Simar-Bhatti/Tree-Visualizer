@@ -9,7 +9,7 @@ export function showTree() {
   document.getElementById('nav-tree').classList.add('active');
   document.getElementById('nav-graph').classList.remove('active');
 
-  document.getElementById('page-title').innerHTML = '🌳 Binary Tree Visualizer';
+  document.getElementById('page-title').innerHTML = 'Binary Tree Visualizer';
 
   document.getElementById('canvas').innerHTML = emptyTree();
 }
@@ -23,7 +23,7 @@ export function showGraph() {
   document.getElementById('nav-tree').classList.remove('active');
   document.getElementById('nav-graph').classList.add('active');
 
-  document.getElementById('page-title').innerHTML = '🔗 Graph Algorithm Visualizer';
+  document.getElementById('page-title').innerHTML = 'Graph Algorithm Visualizer';
 
   document.getElementById('canvas').innerHTML = emptyGraph();
 }

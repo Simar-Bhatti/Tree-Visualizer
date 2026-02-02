@@ -72,6 +72,16 @@ window.buildGraph = function () {
   document.getElementById('btn-astar').disabled = !state.isWeighted;
 };
 
+function resetGraphStates() {
+  for (const node of state.graphNodes) {
+    node.state = 'unvisited';
+  }
+  for (const edge of state.graphEdges) {
+    edge.highlighted = false;
+  }
+  drawGraphCanvas();
+}
+
 /* ---------------- ALGORITHM BUTTONS ---------------- */
 
 window.startBFS = async function () {
@@ -80,9 +90,12 @@ window.startBFS = async function () {
   if (!(s in state.graph)) return alert('Invalid start node');
 
   state.isRunning = true;
-  resetGraphStates();
-  await bfs(s);
-  state.isRunning = false;
+  try {
+    resetGraphStates();
+    await bfs(s);
+  } finally {
+    state.isRunning = false;
+  }
 };
 
 window.startDFS = async function () {
@@ -91,30 +104,41 @@ window.startDFS = async function () {
   if (!(s in state.graph)) return alert('Invalid start node');
 
   state.isRunning = true;
-  resetGraphStates();
-  await dfs(s, new Set());
-  state.isRunning = false;
+  try {
+    resetGraphStates();
+    await dfs(s, new Set());
+  } finally {
+    state.isRunning = false;
+  }
 };
 
 window.startDijkstra = async function () {
   if (state.isRunning) return;
   const s = Number(document.getElementById('start-node').value);
   const e = Number(document.getElementById('end-node').value);
+  if (!(s in state.graph) || !(e in state.graph)) return alert('Invalid start/end node');
 
   state.isRunning = true;
-  resetGraphStates();
-  await dijkstra(s, e);
-  state.isRunning = false;
+  try {
+    resetGraphStates();
+    await dijkstra(s, e);
+  } finally {
+    state.isRunning = false;
+  }
 };
 
 window.startAStar = async function () {
   if (state.isRunning) return;
   const s = Number(document.getElementById('start-node').value);
   const e = Number(document.getElementById('end-node').value);
+  if (!(s in state.graph) || !(e in state.graph)) return alert('Invalid start/end node');
 
   state.isRunning = true;
-  resetGraphStates();
-  await aStar(s, e);
-  state.isRunning = false;
+  try {
+    resetGraphStates();
+    await aStar(s, e);
+  } finally {
+    state.isRunning = false;
+  }
 };
 

@@ -16,10 +16,10 @@ export function drawGraphCanvas() {
     const to = state.graphNodes[edge.to];
 
     if (edge.highlighted) {
-      ctx.strokeStyle = 'rgba(17,153,142,0.8)';
-      ctx.lineWidth = 5;
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+      ctx.lineWidth = 4;
     } else {
-      ctx.strokeStyle = 'rgba(102,126,234,0.4)';
+      ctx.strokeStyle = 'rgba(255,255,255,0.6)';
       ctx.lineWidth = 3;
     }
 
@@ -33,10 +33,10 @@ export function drawGraphCanvas() {
       const mx = (from.x + to.x) / 2;
       const my = (from.y + to.y) / 2;
 
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = '#1a1a20';
       ctx.fillRect(mx - 15, my - 12, 30, 24);
 
-      ctx.fillStyle = '#667eea';
+      ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 14px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -61,8 +61,8 @@ export function drawGraphCanvas() {
       gradient.addColorStop(0, '#11998e');
       gradient.addColorStop(1, '#38ef7d');
     } else {
-      gradient.addColorStop(0, '#667eea');
-      gradient.addColorStop(1, '#764ba2');
+      gradient.addColorStop(0, '#ffffff');
+      gradient.addColorStop(1, '#e6e6e6');
     }
 
     ctx.fillStyle = gradient;
@@ -70,11 +70,11 @@ export function drawGraphCanvas() {
     ctx.arc(node.x, node.y, 25, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = '#ffffff';
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = '#0b0b0e';
     ctx.font = 'bold 18px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

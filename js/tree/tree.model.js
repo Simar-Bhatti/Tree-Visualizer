@@ -16,13 +16,13 @@ export function buildTreeFromArray(arr) {
   while (queue.length && i < arr.length) {
     const node = queue.shift();
 
-    if (arr[i] !== null) {
+    if (i < arr.length && arr[i] !== null) {
       node.left = new TreeNode(arr[i]);
       queue.push(node.left);
     }
     i++;
 
-    if (arr[i] !== null) {
+    if (i < arr.length && arr[i] !== null) {
       node.right = new TreeNode(arr[i]);
       queue.push(node.right);
     }

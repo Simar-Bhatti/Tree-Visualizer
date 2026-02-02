@@ -78,7 +78,7 @@ export async function dijkstra(start, end) {
       if (alt < dist[v]) {
         dist[v] = alt;
         prev[v] = u;
-        pq.push(v, alt); // 🔑 priority = distance
+        pq.push(v, alt); 
       }
     }
 
